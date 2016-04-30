@@ -13,10 +13,10 @@ var pushTokenSchema = mongoose.Schema({
 pushTokenSchema.statics.clearAll = function(next){
     Token.remove({}, function(err, message){
         if(err){
-            next(err);
+            next("Error al borrar Tokens");
             return;
         }
-        next(null, message);
+        next(null, "Tokens borrados");
         return;
     })
 }
