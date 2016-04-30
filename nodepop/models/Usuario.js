@@ -11,10 +11,10 @@ var usuarioSchema = mongoose.Schema({
 usuarioSchema.statics.clearAll = function(next){
     Usuario.remove({}, function(err, message){
         if(err){
-            next(err);
+            next("Error al borrar Usuarios");
             return;
         }
-        next(null, message);
+        next(null, "Usuarios borrados");
         return;
     })
 }

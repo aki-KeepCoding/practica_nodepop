@@ -13,10 +13,10 @@ var anuncioSchema = mongoose.Schema({
 anuncioSchema.statics.clearAll = function(next){
     Anuncio.remove({}, function(err, message){
         if(err){
-            next(err);
+            next("Error al borrar Anuncios");
             return;
         }
-        next(null, message);
+        next(null, "Anuncios borrados");
         return;
     })
 }

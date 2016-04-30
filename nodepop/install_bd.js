@@ -1,65 +1,37 @@
 'use strict';
 
+var async = require('async');
 var mongoose = require('mongoose');
-//DB Connection
+
+//Conectar a BD
 require('./lib/connectMongoose');
 
-//Models
+//Inicializar Models
 require('./models/Anuncio');
 var Anuncio = mongoose.model('Anuncio');
 require('./models/Usuario');
 var Usuario = mongoose.model('Usuario');
-
 require('./models/Token');
 var Token = mongoose.model('Token');
 
 
-
-Anuncio.clearAll(function(err, message){
-    if(err){
-        console.log("err", err);
+//Ejecutamos el borrado secuencialmente: 1.Anuncios>>2.Usuario>>3.Tokens
+//Usamos la librería [Async](https://github.com/caolan/async) para facilitar tarea
+async.series([
+        Anuncio.clearAll,
+        Usuario.clearAll,
+        Token.clearAll
+    ],
+    // optional callback
+    function(err, results){
+        mongoose.disconnect(function(){
+            console.log("Disconnected from MongoDB");
+        });
+        if(err){
+            console.error('error', err);
+            return;
+        }
+        console.log("resultado", results);
         return;
     }
-    console.log("Anuncios borrados");
-    return;
-});
-
-Usuario.clearAll(function(err, message){
-    if(err){
-        console.log("err", err);
-        return;
-    }
-    console.log("Usuarios borrados");
-    return;
-})
-
-Token.clearAll(function(err, message){
-    if(err){
-        console.log("err", err);
-        return;
-    }
-    console.log("Tokens borrados");
-    return;
-})
-
-
-
-//borrar Anuncios
-    //  borrar usuarios
-        // borrar tokens
-
-
-// { "anuncios": [ { 
-//         "nombre": "Bicicleta", 
-//         "venta": true, 
-//         "precio": 230.15, 
-//         "foto": "bici.jpg", 
-//         "tags": [ "lifestyle", "motor"]
-//     }, { 
-//         "nombre": "iPhone 3GS", 
-//         "venta": false, 
-//         "precio": 50.00, 
-//         "foto": "iphone.png", 
-//         "tags": [ "lifestyle", "mobile"] 
-//     }] 
-// }
+);
