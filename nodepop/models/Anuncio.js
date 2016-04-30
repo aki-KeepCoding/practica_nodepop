@@ -8,7 +8,7 @@ var anuncioSchema = mongoose.Schema({
     precio: Number, 
     foto: String, 
     tags: [String] 
-})
+});
 
 anuncioSchema.statics.clearAll = function(next){
     Anuncio.remove({}, function(err, message){
@@ -16,11 +16,12 @@ anuncioSchema.statics.clearAll = function(next){
             next(err);
             return;
         }
-        console.log(message);
         next(null, message);
         return;
     })
 }
+
+
 var Anuncio = mongoose.model('Anuncio', anuncioSchema);
 
 
