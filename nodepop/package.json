@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "DEBUG=express,nodepop:* PORT=3001 NODE_ENV=development nodemon ./bin/www",
+    "startProd": "PORT=3000 NODE_ENV=production nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
