@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=express,nodepop:* PORT=3001 NODE_ENV=development nodemon ./bin/www",
-    "startProd": "PORT=3000 NODE_ENV=production nodemon ./bin/www"
+    "start": "NODE_PATH=. DEBUG=express,nodepop:* PORT=3001 NODE_ENV=development nodemon ./bin/www",
+    "startProd": "NODE_PATH=. PORT=3000 NODE_ENV=production nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -12,6 +12,7 @@
     "debug": "~2.2.0",
     "ejs": "~2.3.3",
     "express": "~4.13.1",
+    "mongoose": "^4.4.14",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0"
   }
