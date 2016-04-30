@@ -1,8 +1,3 @@
-- https://gist.github.com/branneman/8048520
-- zoom a calle : union de tramovial ... http://postgis.net/docs/ST_MakeLine.html
-- http://www.todojs.com/ directo jsday
-
-
 Práctica JS/Node.js/MongoDB (Master II 2015) 
 ============================================
 Imaginemos que un cliente nos pasa el siguiente briefing para que le hagamos este trabajo: 
