@@ -63,7 +63,7 @@ El script *install_bd.js* permite inicializar la base de datos con un set de dat
 $> node install_bd.js
 ```
 
-El scritp borra los datos de la BD con conexión activa. Como el script de conexión a mongoose asume que si no pasamos un NODE_ENV concreto conectamos a una bd llamada nodepop_dev, se borrarán estos datos y se añadira el set de prueba ahí.
+El script borra los datos de la BD con conexión activa. Como el script de conexión a mongoose asume que si no pasamos un NODE_ENV concreto conectamos a una bd llamada nodepop_dev, se borrarán estos datos y se añadira el set de prueba ahí.
 
 
 
@@ -90,4 +90,65 @@ async.series([
 A tener en cuenta: Cada función llamada en el array de tasks se le pasa un callback cuyos resultados se recogen en la función callback final a través del array *results* ([res_Anuncio.clearAll, res_Usuario.clearAll, res_Token.clearAll]).
 
 Para entender mejor cómo funciona async.series se puede consultar su [documentación](http://bit.ly/1pSUUX1)
+
+
+### Carga de datos
+He añadido a la secuencia dos funciones más:
+
+ 1. Encriptar las claves de usuario (`encryptUserPass`)
+ 2. Guardar nuevo set de datos (`loadNewData`)
+
+ Para encriptar la clave he creado una nueva función estática en el esquema de  usuario, `encryptClave(usuario, callback)`. Esta función es llamada mediante la función [map de Async](https://github.com/caolan/async#mapcoll-iteratee-callback).
+
+```javascript
+function encryptUserPass(callback){
+    async.map(usuariosData, Usuario.encryptClave, callback);
+    return;
+}
+```
+
+La función loadNewData llama a la función `async.parallel([arrayDeFunciones], callback)`. Para más info consultar documentación de [async.parallel](https://github.com/caolan/async#paralleltasks-callback)
+
+```javascript
+function loadNewData(callback){
+    async.parallel([
+            function(callback){
+                Usuario.saveAll(usuariosData, callback);
+            },
+            function(callback){
+                Anuncio.saveAll(anunciosData, callback);
+            }
+        ],
+        // optional callback
+        function(err, results){
+            callback(err, results);
+            // the results array will equal ['one','two'] even though
+            // the second function had a shorter timeout.
+        });
+}
+```
+
+Cada tarea enviada a async.parallel ejecuta una función estática para cada esquema de usuarios, anuncios y tokens (`saveAll(arrayUsuarios, callback)`) que realiza el guardado de un array de elementos recibidos. Esta función utiliza la librería Async para guardar en paralelo cada uno de los usuarios. La función `async.each([ArrayDeObjAGuardar], funcionAAplicar, callbackOpcional)`. A cada elemento le aplicamos una función que llama a `Usuario.save`. La función debe llamar al callback que recibe pero en este caso tiene un pequeño handicap: sólo puede responder con un error. No es capaz de reenviar los resultados combinados como en el caso de `async.series`. En la [documentación](https://github.com/caolan/async#eachcoll-iteratee-callback) se explica en detalle el funcionamiento de `async.each`.
+
+
+```javascript
+usuarioSchema.statics.saveAll = function(usuariosData, callback){
+    async.each(usuariosData, function(usuarioData, cb){
+        var usuario = new Usuario(usuarioData);
+        usuario.save(function(err, newUsuario){
+            if (err){
+                cb(err);
+                return;
+            }
+            console.log(`Usuario ${newUsuario.nombre} guardado en BD`);
+            cb();
+            return;
+        })
+    }, function(err){
+        callback(err, 'Usuarios Guardados');
+    })
+}
+```
+
+**NOTA!!** : Comentar que no me había dado cuenta de que [Mongoose ya soporta nativamente el guardado de múltiples documentos](http://stackoverflow.com/a/14133893). Dejo intacta la implementación de saveAll en este caso a efectos de mejor entendimiento personal de la librería *async* y sus funciones...en un proyecto real hubiera implementado el guardado múltiple con el API oficial.
 

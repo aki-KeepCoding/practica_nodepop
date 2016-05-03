@@ -73,9 +73,6 @@ Tras analizar el briefing vemos que tenemos que guardar varias cosas en la base 
 - Tokens para push notifications 
 
 Por tanto, nos podemos hacer unos modelos de mongoose con estas entidades. Por ejemplo, los modelos pueden tener esta pinta: 
-```javascript
-v
-```
 
 ```javascript
 var anuncioSchema = mongoose.Schema({ 

@@ -1,5 +1,6 @@
 'use strict';
 
+var async = require('async');
 var mongoose = require('mongoose');
 
 var pushTokenSchema = mongoose.Schema({ 
@@ -9,6 +10,24 @@ var pushTokenSchema = mongoose.Schema({
         token: String, 
         usuario: String 
 })
+
+
+pushTokenSchema.statics.saveAll = function(tokensData, callback){
+    async.each(tokensData, function(tokenData, callback){
+        var token = new Token(tokenData);
+        token.save(function(err, newToken){
+            if (err){
+                callback(err);
+                return;
+            }
+            console.log(`Token ${newToken.token} guardado en BD`);
+            callback();
+            return;
+        })
+    }, function(err){
+        callback(err, 'Tokens Guardados');
+    })
+}
 
 pushTokenSchema.statics.clearAll = function(next){
     Token.remove({}, function(err, message){
