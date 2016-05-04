@@ -29,7 +29,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//Auth
+var passport = require('passport');
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+opts.secretOrKey = 'secret';
+passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+  User.findOne({id: jwt_payload.sub}, function(err, user) {
+    if (err) {
+      return done(err, false);
+    }
+    if (user) {
+      done(null, user);
+    } else {
+      done(null, false);
+      // or you could create a new account
+    }
+  });
+}));
+
+
+app.use('/api/v1/auth', passport.authenticate('jwt', { session: false }));
 //RUTAS
+
 app.use('/api/v1/anuncios', anuncios);
 app.use('/api/v1/usuarios', usuarios);
 
