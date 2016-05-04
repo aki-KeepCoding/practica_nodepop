@@ -13,15 +13,15 @@ var pushTokenSchema = mongoose.Schema({
 
 
 pushTokenSchema.statics.saveAll = function(tokensData, callback){
-    async.each(tokensData, function(tokenData, callback){
+    async.each(tokensData, function(tokenData, cb){
         var token = new Token(tokenData);
         token.save(function(err, newToken){
             if (err){
-                callback(err);
+                cb(err);
                 return;
             }
             console.log(`Token ${newToken.token} guardado en BD`);
-            callback();
+            cb();
             return;
         })
     }, function(err){

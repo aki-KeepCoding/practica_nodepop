@@ -38,7 +38,7 @@ usuarioSchema.statics.saveAll = function(usuariosData, callback){
     }, function(err){
         callback(err, 'Usuarios Guardados');
     })
-}
+};
 
 usuarioSchema.statics.encryptClave = function(usuario, callback){
     if(usuario.clave){
@@ -58,8 +58,12 @@ usuarioSchema.statics.encryptClave = function(usuario, callback){
             });
         });    
     }
-}
+};
 
+usuarioSchema.statics.list = function (req,res,next) {
+    var qry = Usuario.find();
+    return qry.exec();
+}
 
 var Usuario = mongoose.model('Usuario', usuarioSchema);
 
