@@ -54,7 +54,7 @@ Notas para el desarrollador
 Cómo empezar 
 ------------
 El orden de las primeras tareas podría ser: 
-1. Crear app Express y probarla (`express nodepop ­­--ejs`) 
+1. Crear app Express y probarla (`express nodepop ­­ejs`)
 2. Meter arranque con nodemon y DEBUG en scripts de package.json 
 3. Instalar Mongoose, modelo de anuncios y probarlo (con algún anuncio.save por ejemplo) 
 4. Hacer un script de carga del json de anuncios, que se puede llamar p.e. install_db.js, que borre las tablas y cargue anuncios, y algún usuario. Lo podemos poner en el package.json para poder usar npm run installDB. 
