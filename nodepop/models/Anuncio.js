@@ -23,21 +23,30 @@ anuncioSchema.statics.clearAll = function(next){
 }
 
 anuncioSchema.statics.saveAll = function(anuncioData, callback){
-    async.each(anuncioData, function(anuncioData, callback){
+    async.each(anuncioData, function(anuncioData, cb){
         var anuncio = new Anuncio(anuncioData);
         anuncio.save(function(err, newAnuncio){
             if (err){
-                callback(err);
+                cb(err);
                 return;
             }
             console.log(`Anuncio ${newAnuncio.nombre} guardado en BD`);
-            callback();
+            cb();
             return;
         })
     }, function(err){
         callback(err, 'Anuncios Guardados');
     })
 }
+
+anuncioSchema.statics.list = function(){
+    var qry = Anuncio.find();
+    //return qry.exec();
+    return new Promise(function (resolve, reject) {
+        reject({error: "error provocado"});
+        return;
+    })
+};
 
 var Anuncio = mongoose.model('Anuncio', anuncioSchema);
 
