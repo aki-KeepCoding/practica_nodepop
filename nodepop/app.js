@@ -1,16 +1,14 @@
 "use strict";
 
+var config = require('./config/general.js');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var config = require('./config/general.js');
 var app = express();
 
-var errorHandler = require('./lib/errorHandler');
 require('./lib/connectMongoose');
 require('./models/Anuncio');
 require('./models/Usuario');
@@ -50,9 +48,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
-//Middleware propio de errores
-app.use(errorHandler);
 
 // error handlers
 

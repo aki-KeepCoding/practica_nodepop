@@ -1,4 +1,6 @@
 module.exports = {
+    idiom : 'es',
+
     /* JWT*/
     'secret': 'TresTigresSeFueronAUnTrigal',
 
