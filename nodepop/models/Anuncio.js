@@ -41,14 +41,14 @@ anuncioSchema.statics.saveAll = function(anuncioData, callback){
 
 anuncioSchema.statics.list = function(){
     var qry = Anuncio.find();
-    //return qry.exec();
-    return new Promise(function (resolve, reject) {
-        reject({error: "error provocado"});
-        return;
-    })
+    return qry.exec();
+    // return new Promise(function (resolve, reject) {
+    //     reject({error: "error provocado"});
+    //     return;
+    // })
 };
 
-var Anuncio = mongoose.model('Anuncio', anuncioSchema);
+var Anuncio = module.exports = mongoose.model('Anuncio', anuncioSchema);
 
 
 

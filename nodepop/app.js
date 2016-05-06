@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var config = require('./config/general.js');
 var app = express();
 
 var errorHandler = require('./lib/errorHandler');
@@ -29,9 +30,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//PASSPORT
+var passport = require('passport');
+app.use(passport.initialize());
+require('./lib/passport_jwt')(passport);
+
+
+
 //RUTAS
 app.use('/api/v1/anuncios', anuncios);
 app.use('/api/v1/usuarios', usuarios);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
