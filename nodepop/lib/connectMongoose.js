@@ -1,5 +1,6 @@
 "use strict";
 
+var config = require('../config/general');
 var mongoose = require('mongoose');
 var conn = mongoose.connection;
 var dbName = "";
@@ -10,6 +11,8 @@ conn.once('open', function(){
 })
 
 // Connect to DB
+//TODO : Cargar cadena conn desde config/general.js
+
 if (process.env.NODE_ENV !== "production"){
     dbName = "nodepop_dev";
     mongoose.connect('mongodb://localhost:27017/nodepop_dev');

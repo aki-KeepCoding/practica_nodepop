@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var config = require('./config/general.js');
 var app = express();
 
 var errorHandler = require('./lib/errorHandler');
@@ -30,33 +31,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-//Auth
+//PASSPORT
 var passport = require('passport');
-var JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
-var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-opts.secretOrKey = 'secret';
-passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-  User.findOne({id: jwt_payload.sub}, function(err, user) {
-    if (err) {
-      return done(err, false);
-    }
-    if (user) {
-      done(null, user);
-    } else {
-      done(null, false);
-      // or you could create a new account
-    }
-  });
-}));
+app.use(passport.initialize());
+require('./lib/passport_jwt')(passport);
 
 
-app.use('/api/v1/auth', passport.authenticate('jwt', { session: false }));
+
 //RUTAS
-
 app.use('/api/v1/anuncios', anuncios);
 app.use('/api/v1/usuarios', usuarios);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
