@@ -30,6 +30,7 @@ router.post('/auth', function(req, res, next){
         if(!usuario){
             return res.json({success: false, message: i18n('AUTH_FAILED', req.query.lang)});
         } else {
+            console.log("llega");
             usuario.comparaClave(req.body.clave, function(err, match){
                 if(match && !err){
                     var tokenData = {
