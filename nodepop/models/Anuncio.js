@@ -22,6 +22,30 @@ anuncioSchema.statics.clearAll = function(next){
     })
 }
 
+
+/*
+ Parámetros:
+
+ Options: {
+    start: Number > Paginación, inicio
+    limit: Number > Paginación, límite
+    sort: String > Criterio de ordenación. p.ej = 'field2 -field2' (ordena ascendente field1 y descendente field2)
+ },
+ query: Objeto de Criterios de búsqueda. p.ej:
+ {
+    venta: true,
+    precio: { $grt}
+ }
+
+ */
+anuncioSchema.statics.search = function(options, criteria){
+    var qry = Anuncio.find(criteria);
+    if (options.start) qry.skip(options.start);
+    if (options.limit) qry.limit(options.limit);
+    if (options.sort) qry.sort(options.sort);
+    return qry.exec()
+};
+
 anuncioSchema.statics.saveAll = function(anuncioData, callback){
     async.each(anuncioData, function(anuncioData, cb){
         var anuncio = new Anuncio(anuncioData);
