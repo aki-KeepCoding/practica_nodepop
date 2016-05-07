@@ -69,6 +69,7 @@ usuarioSchema.methods.comparaClave = function(clave, callback){
 
 
 
+
 //Todo : a borrar. Obsoleto...modificar install_bd
 usuarioSchema.statics.encryptClave = function(usuario, callback){
     if(usuario.clave){
