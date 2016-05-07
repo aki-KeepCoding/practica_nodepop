@@ -12,8 +12,10 @@ var app = express();
 require('./lib/connectMongoose');
 require('./models/Anuncio');
 require('./models/Usuario');
+require('./models/Token');
 var anuncios = require('./routes/api/v1/anuncios');
 var usuarios = require('./routes/api/v1/usuarios');
+var tokens= require('./routes/api/v1/tokens');
 
 
 // view engine setup
@@ -39,6 +41,7 @@ require('./lib/passport_jwt')(passport);
 //RUTAS
 app.use('/api/v1/anuncios', anuncios);
 app.use('/api/v1/usuarios', usuarios);
+app.use('/api/v1/tokens', tokens);
 
 
 

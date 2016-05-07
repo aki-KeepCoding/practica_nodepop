@@ -14,10 +14,6 @@ router.use(passport.authenticate('jwt', {session:false}));
 
 //Obtener una lista de Anuncios
 router.get('/', function(req, res, next){
-    var start = parseInt(req.query.start) || 0;
-    var limit = parseInt(req.query.limit) || null;
-
-
     //Componer options
     var options = {};
     options.start = req.query.start || 0;
@@ -37,7 +33,11 @@ router.get('/', function(req, res, next){
     }
     //Componer criterio Tags
     if(req.query.tag){
-        searchCriteria.tags= req.query.tag;
+        //field : { $in : array
+        console.log()
+        var tagValues = req.query.tag.split(',');
+        searchCriteria.tags = {};
+        searchCriteria.tags.$all = tagValues;
     }
     Anuncio.search(options, searchCriteria)
        .then(function(result){
@@ -46,6 +46,23 @@ router.get('/', function(req, res, next){
        .catch(function(err){
            next(err);
        })
+});
+
+
+router.get('/tags', function (req,res) {
+    var tagSet = new Set();
+    Anuncio.listTags()
+        .then(function(result){
+
+            result
+                .forEach(function(resultItem){
+                    resultItem.tags.forEach(function(tag){
+                        tagSet.add(tag);
+                    })
+                });
+
+            res.json({success:true, result:Array.from(tagSet)});
+        })
 });
 
 module.exports = router;
