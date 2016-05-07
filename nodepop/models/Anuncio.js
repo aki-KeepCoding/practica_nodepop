@@ -5,10 +5,13 @@ var mongoose = require('mongoose');
 
 var anuncioSchema = mongoose.Schema({ 
     nombre: String, 
-    venta: Boolean, 
+    venta: Boolean,
     precio: Number, 
     foto: String, 
-    tags: [String] 
+    tags: [{
+        type: String,
+        enum: ['work', 'lifestyle', 'motor', 'mobile']
+    }]
 });
 
 anuncioSchema.statics.clearAll = function(next){
@@ -45,6 +48,15 @@ anuncioSchema.statics.search = function(options, criteria){
     if (options.sort) qry.sort(options.sort);
     return qry.exec()
 };
+
+
+anuncioSchema.statics.listTags = function(){
+    var qry = Anuncio.find().select('tags -_id');
+    return qry.exec();
+};
+
+
+
 
 anuncioSchema.statics.saveAll = function(anuncioData, callback){
     async.each(anuncioData, function(anuncioData, cb){

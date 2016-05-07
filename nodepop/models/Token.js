@@ -2,27 +2,50 @@
 
 var async = require('async');
 var mongoose = require('mongoose');
+var Usuario = mongoose.model('Usuario');
 
 var pushTokenSchema = mongoose.Schema({ 
     plataforma: {
-        type: String, 
-        enum: ['ios', 'android']}, 
-        token: String, 
-        usuario: String 
-})
+        type: String,
+        required: true,
+        enum: ['ios', 'android']
+    },
+    token: {
+        type: String,
+        required:true
+    },
+    usuario: {
+        type: String
+    }
+});
+
+
+//Custom validation
+//Comprobamos que el usuario exista antes de asignarlo al token
+pushTokenSchema.path('usuario').validate(function (value, respond) {
+    if (!value) respond(true);
+
+    Usuario.findOne({_id: value}, function (err, doc) {
+
+        if (err || !doc) {
+            respond(false);
+        } else {
+            respond(true);
+        }
+    });
+
+},"NON_EXISTENT_USER_ID");
+
+
 
 
 pushTokenSchema.statics.saveAll = function(tokensData, callback){
-    async.each(tokensData, function(tokenData, cb){
+    async.each(tokensData, function(tokenData, done){
         var token = new Token(tokenData);
         token.save(function(err, newToken){
-            if (err){
-                cb(err);
-                return;
-            }
+            if (err) return done(err);
             console.log(`Token ${newToken.token} guardado en BD`);
-            cb();
-            return;
+            return done();
         })
     }, function(err){
         callback(err, 'Tokens Guardados');
@@ -31,12 +54,8 @@ pushTokenSchema.statics.saveAll = function(tokensData, callback){
 
 pushTokenSchema.statics.clearAll = function(next){
     Token.remove({}, function(err, message){
-        if(err){
-            next("Error al borrar Tokens");
-            return;
-        }
-        next(null, "Tokens borrados");
-        return;
+        if(err) return next("Error al borrar Tokens");
+        return next(null, "Tokens borrados");
     })
 }
 
