@@ -56,7 +56,7 @@ CARGA DE DATOS DE PRUEBA
 API
 ===
 
-Consideraciones generales
+CONSIDERACIONES GENERALES
 -------------------------
 
 ### Host y puerto
@@ -85,7 +85,7 @@ Se puede especificar el lenguaje en el que se desean recibir las notificaciones 
 Si no se especifica ningún valor las respuestas por defecto se harán en español (`lang=es`).
 
 
-Registro
+REGISTRO
 --------
 Petición POST a la siguiente URL:
 ```txt
@@ -98,10 +98,10 @@ Parámetros:
 - **clave**: Clave del usuario (OBLIGATORIO)
 
 Respuesta:
- ```javascript
+```javascript
 {
   "success": true,
-  "message": "User created"
+  "response": "User created"
 }
 ```
 
@@ -109,7 +109,7 @@ Errores:
 - El usuario ya existe: El email del usuario es único en la base de datos
 
 
-Autenticación
+AUTENTICACIÓN
 -------------
 Es necesario autenticarse para poder realizar algunas consultas al API
 
@@ -128,15 +128,19 @@ Respuesta:
 ```javascript
 {
   "success": true,
-  "token": "eyJhbGciOiJI......4zRb6w3-hI7aM"
+  "response": {
+    token: "eyJhbGciOiJI......4zRb6w3-hI7aM"
+  }
 }
 ```
 
 
-Anuncios
+ANUNCIOS
 ---------
 
 ### Lista de anuncios completa
+
+Lista de todos los anuncios existentes en la base de datos.
 
 Petición GET:
 ```txt
@@ -149,7 +153,9 @@ Parámetros:
 Respuesta:
 
 ```javascript
-[
+{
+  "status": true,
+  "response": [
     {
         _id: "57291faf09c32785ae9d5c0d",
         nombre: "Bicicleta",
@@ -168,25 +174,34 @@ Respuesta:
 
 ### Lista filtrada de anuncios
 
+Devuelve una lista filtrada de anuncios según parámetros proporcionados.
 
 Petición GET:
 ```txt
 > [host:puerto]/api/v1/anuncios
 ```
+
 Parámetros:
-- token: Token JWT (OBLIGATORIO)
-- start:
-- limit:
-- sort:
-- venta:
-- precio:
-- nombre:
-- tag:
+- **token**: Token JWT (OBLIGATORIO)
+- **start**: Desde qué registro (OPCIONAL). Por defecto 0
+- **limit**: Hasta que registro (OPCIONAL). Por defecto null
+- **sort**: Se espera un string del formato: `sort=precio -nombre`. Ordenaría precio de forma ascendente y nombre de forma descendente. (OPCIONAL)
+- **venta**: true|false (OPCIONAL). Si no se pasa el argumento no filtra por este parámetro
+- **precio**: Un texto con el siguiente formato (OPCIONAL): 
+    - `precio=10-50`: Anuncios con el precio >= 10 y <= 50
+    - `precio=10-`: Anuncios con el precio >= 10
+    - `precio=10`: Anuncios con el precio = 10
+    - `precio=-50`: Anuncios con el precio <= 50
+- **nombre**: Un texto para filtrar productos por nombre (OPCIONAL). El texto coincidirá con el inicio del nombre de producto.
+- **tag**: Un texto con el siguiente formato: `tag=lifestile,motor` (OPCIONAL). Filtra los anuncios que tengan todos (exactamente todos) los tags proporcionados.
+- **tagsAny**: cualquier valor (OPCIONAL). Sieste parámetro está presente modifica el comportamiento de tag y  filtra los anuncios que tengan cualquiera de los tags proporcionados.
 
 Respuesta:
 
 ```javascript
-[
+{
+  "status": true,
+  "response": [
     {
         _id: "57291faf09c32785ae9d5c0d",
         nombre: "Bicicleta",
@@ -199,7 +214,125 @@ Respuesta:
             "motor"
         ]
     },
-    //...+ objetos
+    //...+ objetos que cumplan los criterios
 ]
 ```
+
+### Lista de tags existentes
+
+Lista de todos los tags asignados a anuncios.
+
+Petición GET:
+```txt
+> [host:puerto]/api/v1/anuncios/tags
+```
+
+Respuesta:
+```javascript
+{
+  "success": true,
+  "response": [
+    "lifestyle",
+    "motor",
+    "mobile"
+  ]
+}
+```
+
+
+PUSH-TOKENS
+------------
+**NOTA**: Por ahora no requiere autenticación. Entiendo que esta funcionalidad habrá que securizarla  pero hasta tener claro cómo se implementa en un cliente, lo mantengo simple.
+
+### Listado de push tokens
+
+Devuelve una lista de todos lo push-tokens existentes en la base de datos
+
+Petición GET:
+```txt
+> [host:puerto]/api/v1/tokens/
+```
+Respuesta:
+```javascript
+{
+  "status": true,
+  "response": [
+    {
+      "_id": "57291faf09c32785ae9d5c0f",
+      "plataforma": "ios",
+      "token": "00000000",
+      "usuario": "Akixe Otegi",
+      "__v": 0
+    },//...más tokens...
+```
+
+### Agregar nuevos tokens
+
+Guarda tokens en la base de datos.
+
+Petición POST:
+```txt
+> [host:puerto]/api/v1/tokens/
+```
+
+Parámetros:
+- **plataforma**: [ios,android]. (OBLIGATORIO).
+- **token**: un texto que representa el token push (OBLIGATORIO)
+- **usuario**: el id de usuario (OPCIONAL). Si no existe el id de usuario proporcionado devuelve error. Si no se proporciona el parámetro se guarda vacio.
+
+
+Respuesta:
+```javascript
+{
+  "status": true,
+  "response": {
+    "__v": 0,
+    "usuario": "57291faf09c32785ae9d5c0b",
+    "token": "00001",
+    "plataforma": "ios",
+    "_id": "572ee3df5b8be3a66dfdeb88"
+  }
+}
+```
+
+
+USUARIOS
+--------
+
+### Listado de todos los usuarios
+
+Devuelve los datos de todos los usuarios.
+
+Petición GET:
+```txt
+> [host:puerto]/api/v1/usuarios/
+```
+
+Parámetros
+- **token**: Token JWT (OBLIGATORIO)
+
+Respuesta:
+
+```javascript
+{
+  "status": true,
+  "message": [
+    {
+      "_id": "57291faf09c32785ae9d5c0b",
+      "nombre": "Akixe Otegi",
+      "email": "akixe.otegi@gmail.com",
+      "clave": "$2a$10$9ShO/pCIMKcglTsHIVkIouywedJGztjZAC.8x2VvidQt6XyqiS/Ui",
+      "__v": 0
+    }, //...más usuarios...
+```
+
+
+
+
+
+
+
+
+
+
 
