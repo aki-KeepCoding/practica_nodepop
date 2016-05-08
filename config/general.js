@@ -1,13 +1,13 @@
 module.exports = {
-    idiom : 'es',
+  idiom: 'es',
 
-    /* JWT*/
-    'secret': 'TresTigresSeFueronAUnTrigal',
+  /* JWT */
+  'secret': 'TresTigresSeFueronAUnTrigal',
 
-    /*Bcrypt*/
-    'rounds' : 10,
+  /* Bcrypt */
+  'rounds': 10,
 
-    /*Mongoose*/
-    'database_dev' : 'mongodb://localhost:27017/nodepop_dev',
-    'database' : 'mongodb://localhost:27017/nodepop'
+  /* Mongoose */
+  'database_dev': 'mongodb://localhost:27017/nodepop_dev',
+  'database': 'mongodb://localhost:27017/nodepop'
 }

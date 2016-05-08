@@ -1,6 +1,6 @@
 {
   "GENERIC_ERROR": "Error genérico. ¿Qué pasó? (｀´）",
-  "AUTH_FAILED" : "¡La autenticación ha fallado! Algo fué mal (~_~メ)",
+  "AUTH_FAILED": "¡La autenticación ha fallado! Algo fué mal (~_~メ)",
   "USER_CREATED": "User created <(_ _)>",
   "USER_EXISTS": "(^_^;) El usuario ya existe. Inténtalo con otro correo electrónico",
   "REG_EMAIL_MISSING": "O_o Falta el correo electrónico (parametro:email). ¡No podemos registrarte! (T_T)",

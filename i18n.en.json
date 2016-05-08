@@ -1,6 +1,6 @@
 {
   "GENERIC_ERROR": "Generic error. What happened? (｀´）",
-  "AUTH_FAILED" : "¡The authentication process failed! Something went wrong (~_~メ)",
+  "AUTH_FAILED": "¡The authentication process failed! Something went wrong (~_~メ)",
   "USER_CREATED": "User created",
   "USER_EXISTS": "(^_^;) User already exists. Try with another email",
   "REG_EMAIL_MISSING": "O_o Email missing (parameter: email). Can't register! (T_T)",
