@@ -3,7 +3,6 @@
 var async = require('async')
 var config = require('../config/general')
 var bcrypt = require('bcrypt')
-const saltRounds = 10
 
 var mongoose = require('mongoose')
 
@@ -27,6 +26,8 @@ var usuarioSchema = mongoose.Schema({
     required: true
   }
 })
+
+usuarioSchema.index({nombre: 1, email: 1})
 
 /*
  * (i) Antes de guardar encryptamos siempre la clave
@@ -66,19 +67,6 @@ usuarioSchema.methods.comparaClave = function (clave, callback) {
     callback(null, match)
   })
 }
-
-// usuarioSchema.statics.encryptClave = function (usuario, callback) {
-//   if (usuario.clave) {
-//     bcrypt.genSalt(saltRounds, function (err, salt) {
-//       if (err) return callback(err)
-//       bcrypt.hash(usuario.clave, salt, function (err, hash) {
-//         if (err) return callback(err)
-//         usuario.clave = hash
-//         return callback(null, usuario)
-//       })
-//     })
-//   }
-// }
 
 usuarioSchema.statics.clearAll = function (next) {
   Usuario.remove({}, function (err) {

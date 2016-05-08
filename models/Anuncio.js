@@ -14,6 +14,8 @@ var anuncioSchema = mongoose.Schema({
   } ]
 })
 
+anuncioSchema.index({nombre: 1, precio: 1, tags: 1})
+
 anuncioSchema.statics.search = function (options, criteria) {
   var qry = Anuncio.find(criteria)
   if (options.start) qry.skip(options.start)
