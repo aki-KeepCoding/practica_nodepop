@@ -79,6 +79,13 @@ usuarioSchema.statics.encryptClave = function (usuario, callback) {
   }
 }
 
+usuarioSchema.statics.clearAll = function (next) {
+  Usuario.remove({}, function (err) {
+    if (err) return next(err)
+    return next(null, 'Usuarios borrados')
+  })
+}
+
 usuarioSchema.statics.list = function () {
   var qry = Usuario.find()
   return qry.exec()

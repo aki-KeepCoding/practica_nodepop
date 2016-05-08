@@ -20,9 +20,21 @@ var anunciosData = [ {
   'nombre': 'iPhone 3GS',
   'venta': false,
   'precio': 50.00,
-  'foto': 'iphone.png',
+  'foto': 'iphone.jpg',
   'tags': [ 'lifestyle', 'mobile' ]
-} ]
+}, {
+  'nombre': 'Taza café',
+  'venta': true,
+  'precio': 10,
+  'foto':'darthCoffee.jpg',
+  'tags':['lifestyle']
+}, {
+  'nombre':'Pegatina Node',
+  'venta': false,
+  'precio': 100.00,
+  'foto': 'stiker.jpg',
+  'tags' : ['work', 'lifestile']
+}]
 
 var tokensData = [
   {
@@ -53,8 +65,7 @@ var Token = mongoose.model('Token')
 
 // Ejecutamos el borrado secuencialmente: 1.Anuncios>>2.Usuario>>3.Tokens
 // Usamos la librería [Async](https://github.com/caolan/async) para facilitar tarea
-async.series([
-  Anuncio.clearAll, Usuario.clearAll, Token.clearAll,
+async.series([Anuncio.clearAll, Usuario.clearAll, Token.clearAll,
   encryptUserPass, loadNewData],
   function (err, results) {
     mongoose.disconnect()
