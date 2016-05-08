@@ -1,4 +1,5 @@
 "use strict";
+var stdRes = require('../../../lib/helpers').stdRes;
 var jwt = require('jsonwebtoken');
 var passport = require('passport');
 var i18n = require('../../../lib/i18n');
@@ -12,11 +13,10 @@ var Usuario = mongoose.model('Usuario');
 router.get('/', passport.authenticate('jwt', {session:false}), function(req,res, next){
     Usuario.list()
         .then(function(result){
-            console.log(result);
-            res.status(200).json(result);
+            return res.json(stdRes.responseOK(result));
         })
         .catch(function (err) {
-            next(err);
+            return next(new Error(err));
         })
 });
 
@@ -28,9 +28,8 @@ router.post('/auth', function(req, res, next){
     }, function(err, usuario){
         if(err) return next(err);
         if(!usuario){
-            return res.json({success: false, message: i18n('AUTH_FAILED', req.query.lang)});
+            return res.json(stdRes.responseERR(i18n('AUTH_FAILED', req.query.lang)));
         } else {
-            console.log("llega");
             usuario.comparaClave(req.body.clave, function(err, match){
                 if(match && !err){
                     var tokenData = {
@@ -39,25 +38,23 @@ router.post('/auth', function(req, res, next){
                         id: usuario._id
                     };
                     var token = jwt.sign(tokenData, config.secret, {expiresIn : "2 days"});
-                    res.json({success:true, token:token});
+                    res.json(stdRes.responseOK({token: token}));
                 } else {
-                    res.json({success:false, message: i18n('AUTH_FAILED', req.query.lang)});
+                    res.json(stdRes.responseERR(i18n('AUTH_FAILED', req.query.lang)));
                 }
             })
         }
-
-
     })
 });
 
 //Registro de nuevos usuarios
 router.post('/registro', function (req, res, next) {
     if(!req.body.email) {
-        res.json({success: false, message:i18n('REG_EMAIL_MISSING', req.query.lang)});
+        res.json(stdRes.responseERR(i18n('REG_EMAIL_MISSING', req.query.lang)));
     } else if (!req.body.clave){
-        res.json({success: false, message:i18n('REG_PASS_MISSING', req.query.lang)});
+        res.json(stdRes.responseERR(i18n('REG_PASS_MISSING', req.query.lang)));
     } else if (!req.body.nombre){
-        res.json({success: false, message:i18n('REG_NAME_MISSING', req.query.lang)});
+        res.json(stdRes.responseERR(i18n('REG_NAME_MISSING', req.query.lang)));
     } else {
         //Crear usuario en BD
         var newUsuario = new Usuario({
@@ -67,10 +64,10 @@ router.post('/registro', function (req, res, next) {
         });
         newUsuario.save(function(err){
             if (err) {
-                res.json({success: false, message: i18n('USER_EXISTS', req.query.lang)});
+                res.json(stdRes.responseERR(i18n('USER_EXISTS', req.query.lang)));
                 return;
             }
-            res.json({success: true, message:i18n('USER_CREATED', req.query.lang)});
+            res.json(stdRes.responseOK(i18n('USER_CREATED', req.query.lang)));
         })
     }
 });
