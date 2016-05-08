@@ -46,7 +46,7 @@ router.get('/', function (req, res, next) {
   // BUSCAR Anuncios
   Anuncio.search(options, searchCriteria)
     .then(function (result) {
-      result = stdRes.responseWithImg(result, req);
+      result = stdRes.responseWithImg(result, req)
       return res.json(stdRes.responseOK(result))
     })
     .catch(function (err) {
