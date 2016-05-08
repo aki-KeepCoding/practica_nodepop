@@ -101,6 +101,9 @@ Para entender mejor cómo funciona async.series se puede consultar su [documenta
 
 
 # CARGA DE DATOS DE PRUEBA
+
+**¡¡(160508) Nota!!**: Después de añadir una precondición de guardado en la que se encripta la clave en cada 'save' el paso uno deja de ser necesario y lo elimino.
+
 He añadido a la secuencia dos funciones más:
 
  1. Encriptar las claves de usuario (`encryptUserPass`)

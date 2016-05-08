@@ -14,15 +14,6 @@ var anuncioSchema = mongoose.Schema({
   } ]
 })
 
-anuncioSchema.statics.clearAll = function (next) {
-  Anuncio.remove({}, function (err) {
-    if (err) {
-      return next('Error al borrar Anuncios')
-    }
-    return next(null, 'Anuncios borrados')
-  })
-}
-
 anuncioSchema.statics.search = function (options, criteria) {
   var qry = Anuncio.find(criteria)
   if (options.start) qry.skip(options.start)
@@ -34,6 +25,14 @@ anuncioSchema.statics.search = function (options, criteria) {
 anuncioSchema.statics.listTags = function () {
   var qry = Anuncio.find().select('tags -_id')
   return qry.exec()
+}
+
+anuncioSchema.statics.clearAll = function (callback) {
+  Anuncio.remove({}, function (err) {
+    console.log('1')
+    if (err) return callback(new Error('Error al borrar Anuncios'))
+    return callback(null, 'Anuncios borrados')
+  })
 }
 
 anuncioSchema.statics.saveAll = function (anuncioData, callback) {

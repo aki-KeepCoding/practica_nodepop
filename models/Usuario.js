@@ -1,5 +1,6 @@
 'use strict'
 
+var async = require('async')
 var config = require('../config/general')
 var bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -66,17 +67,36 @@ usuarioSchema.methods.comparaClave = function (clave, callback) {
   })
 }
 
-usuarioSchema.statics.encryptClave = function (usuario, callback) {
-  if (usuario.clave) {
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      if (err) return callback(err)
-      bcrypt.hash(usuario.clave, salt, function (err, hash) {
-        if (err) return callback(err)
-        usuario.clave = hash
-        return callback(null, usuario)
-      })
+// usuarioSchema.statics.encryptClave = function (usuario, callback) {
+//   if (usuario.clave) {
+//     bcrypt.genSalt(saltRounds, function (err, salt) {
+//       if (err) return callback(err)
+//       bcrypt.hash(usuario.clave, salt, function (err, hash) {
+//         if (err) return callback(err)
+//         usuario.clave = hash
+//         return callback(null, usuario)
+//       })
+//     })
+//   }
+// }
+
+usuarioSchema.statics.clearAll = function (next) {
+  Usuario.remove({}, function (err) {
+    if (err) return next(err)
+    return next(null, 'Usuarios borrados')
+  })
+}
+usuarioSchema.statics.saveAll = function (usuariosData, callback) {
+  async.each(usuariosData, function (usuarioData, done) {
+    var usuario = new Usuario(usuarioData)
+    usuario.save(function (err, newUsuario) {
+      if (err) return done(new Error(err))
+      console.log(`Usuario ${newUsuario.nombre} guardado en BD`)
+      return done()
     })
-  }
+  }, function (err) {
+    callback(err, 'Usuarios Guardados')
+  })
 }
 
 usuarioSchema.statics.list = function () {

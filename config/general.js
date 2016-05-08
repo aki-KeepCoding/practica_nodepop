@@ -1,6 +1,4 @@
 module.exports = {
-  idiom: 'es',
-
   /* JWT */
   'secret': 'TresTigresSeFueronAUnTrigal',
 
@@ -9,5 +7,9 @@ module.exports = {
 
   /* Mongoose */
   'database_dev': 'mongodb://localhost:27017/nodepop_dev',
-  'database': 'mongodb://localhost:27017/nodepop'
+  'database': 'mongodb://localhost:27017/nodepop',
+
+  /* Otros */
+  'idiom': 'es',
+  'imgsBaseURL': '/images/'
 }
