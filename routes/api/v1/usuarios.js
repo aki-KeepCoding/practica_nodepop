@@ -28,6 +28,7 @@ router.post('/auth', function (req, res, next) {
   }, function (err, usuario) {
     if (err) return next(err)
     if (!usuario) {
+      console.log('1')
       return res.json(stdRes.responseERR(i18n('AUTH_FAILED', req.query.lang)))
     } else {
       usuario.comparaClave(req.body.clave, function (err, match) {
@@ -40,6 +41,7 @@ router.post('/auth', function (req, res, next) {
           var token = jwt.sign(tokenData, config.secret, { expiresIn: '2 days' })
           res.json(stdRes.responseOK({ token: token }))
         } else {
+          console.log('2')
           res.json(stdRes.responseERR(i18n('AUTH_FAILED', req.query.lang)))
         }
       })
