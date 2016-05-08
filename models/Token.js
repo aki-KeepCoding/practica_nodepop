@@ -26,7 +26,6 @@ pushTokenSchema.path('usuario').validate(function (value, respond) {
     if (!value) respond(true);
 
     Usuario.findOne({_id: value}, function (err, doc) {
-
         if (err || !doc) {
             respond(false);
         } else {
