@@ -1,5 +1,20 @@
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
+DESPLIEGUE DE NODEPOP (MÓDULO DEVOPS)
+======================================
+**Práctica 1: API NODEPOP**
+- Base de urls de API con DNS: **ec2-23-22-4-4.compute-1.amazonaws.com/nodepop/api/v1/**
+- Base con subdominio: **projects.akixe.info/nodepop/api/v1/**
+- Ejemplo de fichero estático: [ http://projects.akixe.info/nodepop/images/bici.png ](http://projects.akixe.info/nodepop/images/bici.png)
+
+**Práctica 2: Página WEB**
+- Con la IP: [23.22.4.4](http://23.22.4.4)
+- Con un dominio personal: [akixe.info](http://akixe.info)
+
+Para ampliar información sobre práctica:
+
+- [ https://github.com/aki-KeepCoding/devops ](https://github.com/aki-KeepCoding/devops)
+
 INSTALACIÓN
 ===========
 
@@ -53,7 +68,16 @@ Accediendo en un navegador a `http://localhost:3000` podremos acceder a la pági
 
 CARGA DE DATOS DE PRUEBA
 ========================
-@todo
+Cargar datos en pruebas
+```sh
+$> node install_bd.js
+```
+
+Cargar datos en producción
+```sh
+$> NODE_ENV=production node install_bd.js
+```
+
 
 API
 ===
