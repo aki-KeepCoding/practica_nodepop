@@ -34,5 +34,7 @@ node_modules
 
 
 # Ingores propios
-data/
+
+data/*
+!data/dummyData.json
 .idea/

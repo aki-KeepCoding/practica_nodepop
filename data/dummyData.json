@@ -1,0 +1,49 @@
+{
+  "usuarios": [
+    {
+      "nombre": "Akixe Otegi",
+      "email": "akixe.otegi@gmail.com",
+      "clave": "1234"
+    }, {
+      "nombre": "Juan Nadie",
+      "email": "j.nadie@example.org",
+      "clave": "4321"
+    }
+  ],
+  "anuncios": [
+    {
+      "nombre": "Bicicleta",
+      "venta": true,
+      "precio": 230.15,
+      "foto": "bici.jpg",
+      "tags": [ "lifestyle", "motor" ]
+    }, {
+      "nombre": "iPhone 3GS",
+      "venta": false,
+      "precio": 50.00,
+      "foto": "iphone.jpg",
+      "tags": [ "lifestyle", "mobile" ]
+    }, {
+      "nombre": "Taza café",
+      "venta": true,
+      "precio": 10,
+      "foto":"darthCoffee.jpg",
+      "tags":["lifestyle"]
+    }, {
+      "nombre":"Pegatina Node",
+      "venta": false,
+      "precio": 100.00,
+      "foto": "stiker.jpg",
+      "tags": ["work", "lifestyle"]
+    }
+  ],
+  "tokens": [
+    {
+      "plataforma": "ios",
+      "token": "00000000"
+    }, {
+      "plataforma": "ios",
+      "token": "00000001"
+    }
+  ]
+}
